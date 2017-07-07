@@ -73,7 +73,7 @@ public class LookupCommand extends PlayerCommand {
 					&& NameAPI.getGroupManager().hasAccess(
 						match.getGroup(), player.getUniqueId(), PermissionType.getPermission("LOOKUP_SNITCH")))) {
 				sender.sendMessage(ChatColor.AQUA
-				                   + "The snitch at [" + x + " " + y + " " + z + "] is owned by "
+				                   + "The snitch at [" + x + " " + y + " " + z + "] is on group "
 				                   + match.getGroup().getName());
 			} else {
 				sender.sendMessage(ChatColor.RED + "You don't have permission to lookup the group of this snitch");
