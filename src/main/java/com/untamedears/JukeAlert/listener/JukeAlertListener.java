@@ -6,11 +6,7 @@ import static com.untamedears.JukeAlert.util.Utility.immuneToSnitch;
 import static com.untamedears.JukeAlert.util.Utility.notifyGroup;
 
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -488,12 +484,13 @@ public class JukeAlertListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onVehicleMovement(VehicleMoveEvent event) {
-			Entity e = event.getVehicle().getPassenger();
-			// TODO: apparently there's no way to get the second passenger? wtf, bukkit
+		List<Entity> entitiesList = event.getVehicle().getPassengers();
+		for(Entity e : entitiesList) {
 			if (e instanceof Player) {
 				enterSnitchProximity(new PlayerMoveEvent((Player) e, event.getFrom(), event.getTo()));
 			}
 		}
+	}
 
 	// Because teleporting doesn't trigger a movement event :/
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -523,12 +520,15 @@ public class JukeAlertListener implements Listener {
 		Set<Snitch> snitches = snitchManager.findSnitches(world, location);
 		for (Snitch snitch : snitches) {
 			if (doesSnitchExist(snitch, true)) {
+				//Creates a temporary list for list snitches, has to be a tree set otherwise it throws huge error logs on the console
+				Set<Snitch> tempList = new TreeSet<>();
 				try {
 					// Refresh cull timer of snitch
 					if (NameAPI.getGroupManager().hasAccess(snitch.getGroup(), player.getUniqueId(),
 							PermissionType.getPermission("LIST_SNITCHES"))) {
 						if (!inList.contains(snitch)) {
 							inList.add(snitch);
+							tempList.add(snitch);
 							plugin.getJaLogger().logSnitchVisit(snitch);
 						}
 					}
@@ -539,6 +539,8 @@ public class JukeAlertListener implements Listener {
 						lastNotifyMoveFailure = System.currentTimeMillis();
 					}
 				}
+				//Removes the snitches so they can hit the immuneToSnitch condition
+				inList.removeAll(tempList);
 
 				try {
 					if ((!immuneToSnitch(snitch, accountId) || isDebugging())) {
@@ -597,6 +599,8 @@ public class JukeAlertListener implements Listener {
 						lastNotifyMoveFailure = System.currentTimeMillis();
 					}
 				}
+				//Re-adds the snitches so it doesnt trigger a new event when a player leaves the boat
+				inList.addAll(tempList);
 			}
 		}
 		snitches = snitchManager.findSnitches(world, location, true);
