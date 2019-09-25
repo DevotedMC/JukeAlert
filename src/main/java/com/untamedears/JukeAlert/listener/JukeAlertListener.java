@@ -6,7 +6,13 @@ import static com.untamedears.JukeAlert.util.Utility.immuneToSnitch;
 import static com.untamedears.JukeAlert.util.Utility.notifyGroup;
 
 import java.sql.SQLException;
-import java.util.*;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.UUID;
+import java.util.List;
+import java.util.TreeSet;
 import java.util.logging.Level;
 
 import net.md_5.bungee.api.chat.ComponentBuilder;
