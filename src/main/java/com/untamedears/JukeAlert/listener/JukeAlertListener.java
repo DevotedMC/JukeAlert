@@ -477,7 +477,7 @@ public class JukeAlertListener implements Listener {
 				}
 				return;
 			}
-			handleSnitchEntry(player);
+			handleSnitchEntry(player, null);
 		} catch (NullPointerException npe) {
 			if (System.currentTimeMillis() - lastNotifyMoveFailure > failureReportDelay) {
 				JukeAlert.getInstance().getLogger().log(Level.SEVERE, "MoveEvent generated an NPE", npe);
@@ -500,10 +500,11 @@ public class JukeAlertListener implements Listener {
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 
 		Player player = event.getPlayer();
-		handleSnitchEntry(player);
+		handleSnitchEntry(player, null);
+		handleSnitchEntry(player, event.getTo());
 	}
 
-	private void handleSnitchEntry(Player player) {
+	private void handleSnitchEntry(Player player, Location overrideLocation) {
 
 		if (player.hasMetadata("NPC")) {
 			return;
@@ -513,7 +514,7 @@ public class JukeAlertListener implements Listener {
 			return;
 		}
 		UUID accountId = player.getUniqueId();
-		Location location = player.getLocation();
+		Location location = (overrideLocation == null ? player.getLocation() : overrideLocation);
 		World world = location.getWorld();
 		Set<Snitch> inList = playersInSnitches.get(accountId);
 		if (inList == null) {
