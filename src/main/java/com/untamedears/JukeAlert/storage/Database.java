@@ -112,7 +112,6 @@ public class Database {
 	 * Are we connected to the database?
 	 *
 	 * @return Connected
-	 * @throws SQLException
 	 */
 	public boolean isConnected() {
 
@@ -128,7 +127,6 @@ public class Database {
 	 * Prepare the SQL statements
 	 *
 	 * @return PreparedStatement
-	 * @throws SQLException
 	 */
 	public PreparedStatement prepareStatement(String sqlStatement) {
 
