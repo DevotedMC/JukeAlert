@@ -13,7 +13,7 @@
 	<groupId>com.untamedears</groupId>
 	<artifactId>JukeAlert</artifactId>
 	<packaging>jar</packaging>
-	<version>2.1.1D</version>
+	<version>2.1.2D</version>
 	<name>JukeAlert</name>
 	<url>https://github.com/DevotedMC/JukeAlert/</url>
 
@@ -27,13 +27,13 @@
 		<dependency>
 			<groupId>vg.civcraft.mc.namelayer</groupId>
 			<artifactId>namelayer-mc</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>vg.civcraft.mc.namelayer</groupId>
 			<artifactId>namelayer-core</artifactId>
-			<version>3.0.0</version>
+			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.github.maxopoly</groupId>
 			<artifactId>artemis</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

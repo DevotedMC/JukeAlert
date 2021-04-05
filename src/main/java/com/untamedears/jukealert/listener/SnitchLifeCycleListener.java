@@ -127,6 +127,9 @@ public class SnitchLifeCycleListener implements Listener {
 	public void changeReinforcement(ReinforcementGroupChangeEvent e) {
 		Location location = e.getReinforcement().getLocation();
 		Snitch snitch = snitchManager.getSnitchAt(location);
+		if (snitch == null) {
+			return;
+		}
 		Player p = e.getPlayer();
 		logger.info(String.format("Group change for snitch of type %s at %s by %s", snitch.getType().getName(),
 				snitch.getLocation().toString(), p != null ? p.getName() : "null"));

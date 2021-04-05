@@ -1,5 +1,7 @@
 package com.untamedears.jukealert.model.actions.abstr;
 
+import com.github.maxopoly.artemis.ArtemisPlugin;
+import com.untamedears.jukealert.JukeAlert;
 import com.untamedears.jukealert.model.Snitch;
 import com.untamedears.jukealert.model.actions.ActionCacheState;
 import com.untamedears.jukealert.model.actions.LoggedActionPersistence;
@@ -12,7 +14,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
+import vg.civcraft.mc.civmodcore.inventory.items.MaterialUtils;
 
 public abstract class LoggablePlayerAction extends PlayerAction implements LoggableAction {
 	
@@ -62,11 +65,12 @@ public abstract class LoggablePlayerAction extends PlayerAction implements Logga
 		boolean sameWorld = JAUtility.isSameWorld(referenceLoc, reference);
 		TextComponent uuid = new TextComponent(getPlayerName());
 		TextComponent comp = new TextComponent(
-				String.format("%s%s  %s ", ChatColor.GOLD, getChatRepresentationIdentifier(), ChatColor.GREEN));
+				String.format("%s%s %s", ChatColor.GOLD, getChatRepresentationIdentifier(), ChatColor.GREEN));
 		comp.addExtra(JAUtility.addNameMCUUIDLink(uuid, getPlayer()));
 		if (live) {
 			comp.addExtra(JAUtility.genTextComponent(snitch));
-			comp.addExtra(String.format("  %s%s", ChatColor.YELLOW,
+			comp.addExtra(ChatColor.YELLOW + "[" + ArtemisPlugin.getInstance().getConfigManager().getOwnIdentifier() + "]");
+			comp.addExtra(String.format(" %s%s", ChatColor.YELLOW,
 					JAUtility.formatLocation(referenceLoc, !sameWorld)));
 		}
 		else {
@@ -81,9 +85,13 @@ public abstract class LoggablePlayerAction extends PlayerAction implements Logga
 	}
 	
 	protected void enrichGUIItem(ItemStack item) {
-		ItemAPI.addLore(item, String.format("%sPlayer: %s", ChatColor.GOLD, getPlayerName()),
+		if (MaterialUtils.isAir(item.getType())){
+			JukeAlert.getInstance().getLogger().info("Tried to enrich air");
+			item = new ItemStack(Material.STONE);
+		}
+		ItemUtils.addLore(item, String.format("%sPlayer: %s", ChatColor.GOLD, getPlayerName()),
 				String.format("%sTime: %s", ChatColor.LIGHT_PURPLE,getFormattedTime()));
-		ItemAPI.setDisplayName(item, ChatColor.GOLD + getGUIName());
+		ItemUtils.setDisplayName(item, ChatColor.GOLD + getGUIName());
 	}
 	
 	protected String getGUIName() {

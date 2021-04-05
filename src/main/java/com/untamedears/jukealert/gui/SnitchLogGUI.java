@@ -1,24 +1,21 @@
 package com.untamedears.jukealert.gui;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import com.untamedears.jukealert.JukeAlert;
 import com.untamedears.jukealert.model.Snitch;
 import com.untamedears.jukealert.model.actions.abstr.LoggableAction;
 import com.untamedears.jukealert.model.appender.LeverToggleAppender;
 import com.untamedears.jukealert.model.appender.SnitchLogAppender;
-import com.untamedears.jukealert.util.JukeAlertPermissionHandler;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
-import vg.civcraft.mc.civmodcore.chatDialog.Dialog;
+import vg.civcraft.mc.civmodcore.chat.dialog.Dialog;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 import vg.civcraft.mc.civmodcore.inventorygui.Clickable;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
@@ -30,8 +27,8 @@ public class SnitchLogGUI {
 
 	public static IClickable constructExitClick() {
 		ItemStack is = new ItemStack(Material.OAK_DOOR);
-		ItemAPI.setDisplayName(is, ChatColor.GOLD + "Exit");
-		ItemAPI.addLore(is, ChatColor.AQUA + "Click to exit GUI");
+		ItemUtils.setDisplayName(is, ChatColor.GOLD + "Exit");
+		ItemUtils.addLore(is, ChatColor.AQUA + "Click to exit GUI");
 		return new Clickable(is) {
 			@Override
 			public void clicked(Player p) {
@@ -69,7 +66,7 @@ public class SnitchLogGUI {
 				}
 			};
 		}
-		ItemAPI.addLore(is, ChatColor.RED + "You do not have permission to do this");
+		ItemUtils.addLore(is, ChatColor.RED + "You do not have permission to do this");
 		return new DecorationStack(is);
 
 	}
@@ -82,12 +79,12 @@ public class SnitchLogGUI {
 			}
 			if (actions.isEmpty()) {
 				ItemStack is = new ItemStack(Material.BARRIER);
-				ItemAPI.setDisplayName(is, ChatColor.RED + "This snitch has no logs currently");
+				ItemUtils.setDisplayName(is, ChatColor.RED + "This snitch has no logs currently");
 				clicks.add(new DecorationStack(is));
 			}
 		} else {
 			ItemStack is = new ItemStack(Material.BARRIER);
-			ItemAPI.setDisplayName(is, ChatColor.RED + "This snitch can not create logs");
+			ItemUtils.setDisplayName(is, ChatColor.RED + "This snitch can not create logs");
 			clicks.add(new DecorationStack(is));
 		}
 		Collections.reverse(clicks);
@@ -96,12 +93,12 @@ public class SnitchLogGUI {
 
 	private IClickable constructInfoStack() {
 		ItemStack is = new ItemStack(Material.PAPER);
-		ItemAPI.setDisplayName(is, ChatColor.GOLD + "Logs for " + snitch.getName());
+		ItemUtils.setDisplayName(is, ChatColor.GOLD + "Logs for " + snitch.getName());
 		Location loc = snitch.getLocation();
-		ItemAPI.addLore(is,
+		ItemUtils.addLore(is,
 				ChatColor.AQUA + "Located at " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ());
-		ItemAPI.addLore(is, ChatColor.YELLOW + "Group: " + snitch.getGroup().getName());
-		ItemAPI.addLore(is, ChatColor.YELLOW + "Type: " + snitch.getType().getName());
+		ItemUtils.addLore(is, ChatColor.YELLOW + "Group: " + snitch.getGroup().getName());
+		ItemUtils.addLore(is, ChatColor.YELLOW + "Type: " + snitch.getType().getName());
 		return new DecorationStack(is);
 	}
 
@@ -118,19 +115,19 @@ public class SnitchLogGUI {
 					if (snitch.hasPermission(player, togglePerm)) {
 						leverAppender.switchState();
 						p.sendMessage(ChatColor.GREEN + "Toggled lever activation "
-								+ (leverAppender.shouldToggle() ? "off" : "on"));
+								+ (leverAppender.shouldToggle() ? "on" : "off"));
 						showScreen();
 					}
 				}
 			};
 		}
-		ItemAPI.addLore(is, ChatColor.RED + "You do not have permission to do this");
+		ItemUtils.addLore(is, ChatColor.RED + "You do not have permission to do this");
 		return new DecorationStack(is);
 	}
 
 	private IClickable constructNameChangeClick() {
 		ItemStack is = new ItemStack(Material.OAK_SIGN);
-		ItemAPI.setDisplayName(is, ChatColor.GOLD + "Rename this snitch");
+		ItemUtils.setDisplayName(is, ChatColor.GOLD + "Rename this snitch");
 		return new Clickable(is) {
 			@Override
 			public void clicked(Player p) {

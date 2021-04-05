@@ -1,7 +1,9 @@
 package com.untamedears.jukealert.model.appender;
 
+import com.untamedears.jukealert.model.Snitch;
+import com.untamedears.jukealert.model.actions.abstr.SnitchAction;
+import com.untamedears.jukealert.model.actions.internal.DestroySnitchAction;
 import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

@@ -1,5 +1,6 @@
 package com.untamedears.jukealert.model.actions.abstr;
 
+import com.untamedears.jukealert.model.Snitch;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;

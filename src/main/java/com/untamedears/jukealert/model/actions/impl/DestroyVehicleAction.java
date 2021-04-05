@@ -1,15 +1,13 @@
 package com.untamedears.jukealert.model.actions.impl;
 
+import com.untamedears.jukealert.model.Snitch;
+import com.untamedears.jukealert.model.actions.abstr.LoggablePlayerVictimAction;
+import com.untamedears.jukealert.util.JAUtility;
 import java.util.UUID;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-
-import com.untamedears.jukealert.model.Snitch;
-import com.untamedears.jukealert.model.actions.abstr.LoggablePlayerVictimAction;
-
-import vg.civcraft.mc.civmodcore.api.ItemNames;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 import vg.civcraft.mc.civmodcore.inventorygui.IClickable;
 
@@ -32,7 +30,7 @@ public class DestroyVehicleAction extends LoggablePlayerVictimAction {
 	 * @return Material of the vehicle destroyed
 	 */
 	public Material getVehicle() {
-		return Material.valueOf(victim);
+		return JAUtility.getVehicle(victim);
 	}
 
 	@Override
@@ -42,7 +40,7 @@ public class DestroyVehicleAction extends LoggablePlayerVictimAction {
 
 	@Override
 	protected String getChatRepresentationIdentifier() {
-		return "Broke " + ItemNames.getItemName(getVehicle());
+		return "Broke " + ItemUtils.getItemName(getVehicle());
 	}
 
 }

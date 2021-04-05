@@ -1,15 +1,15 @@
 package com.untamedears.jukealert.model.appender;
 
+import com.untamedears.jukealert.JukeAlert;
+import com.untamedears.jukealert.model.Snitch;
+import com.untamedears.jukealert.model.actions.abstr.SnitchAction;
+import com.untamedears.jukealert.model.appender.config.LeverToggleConfig;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Powerable;
 import org.bukkit.configuration.ConfigurationSection;
-
-import com.untamedears.jukealert.JukeAlert;
-import com.untamedears.jukealert.model.Snitch;
-import com.untamedears.jukealert.model.actions.abstr.SnitchAction;
-import com.untamedears.jukealert.model.appender.config.LeverToggleConfig;
 
 public class LeverToggleAppender extends ConfigurableSnitchAppender<LeverToggleConfig> {
 	
@@ -45,6 +45,11 @@ public class LeverToggleAppender extends ConfigurableSnitchAppender<LeverToggleC
 			}
 			Powerable power = (Powerable) leverBlock.getBlockData();
 			power.setPowered(true);
+			leverBlock.setBlockData(power);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(JukeAlert.getInstance(), () -> {
+				power.setPowered(false);
+				leverBlock.setBlockData(power);
+			}, 20L);
 		}
 	}
 	
@@ -55,6 +60,13 @@ public class LeverToggleAppender extends ConfigurableSnitchAppender<LeverToggleC
 	public void switchState() {
 		shouldToggle = !shouldToggle;
 		snitch.setDirty();
+	}
+
+	@Override
+	public void persist() {
+		if (snitch.getId() != -1) {
+			JukeAlert.getInstance().getDAO().setToggleLever(snitch.getId(), shouldToggle);
+		}
 	}
 
 	@Override

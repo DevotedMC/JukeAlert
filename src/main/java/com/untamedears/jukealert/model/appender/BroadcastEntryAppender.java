@@ -1,21 +1,18 @@
 package com.untamedears.jukealert.model.appender;
 
-import java.util.UUID;
-
-import com.untamedears.jukealert.util.JAUtility;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
-
+import com.github.maxopoly.artemis.ArtemisPlugin;
+import com.github.maxopoly.artemis.NameAPI;
+import com.github.maxopoly.artemis.rabbit.outgoing.RabbitSendPlayerTextComponent;
 import com.untamedears.jukealert.JukeAlert;
 import com.untamedears.jukealert.model.Snitch;
 import com.untamedears.jukealert.model.actions.abstr.LoggablePlayerAction;
 import com.untamedears.jukealert.model.actions.abstr.SnitchAction;
 import com.untamedears.jukealert.model.appender.config.LimitedActionTriggerConfig;
 import com.untamedears.jukealert.util.JASettingsManager;
-import com.untamedears.jukealert.util.JukeAlertPermissionHandler;
+import java.util.UUID;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 
 public class BroadcastEntryAppender extends ConfigurableSnitchAppender<LimitedActionTriggerConfig> {
 
@@ -38,10 +35,6 @@ public class BroadcastEntryAppender extends ConfigurableSnitchAppender<LimitedAc
 			return;
 		}
 		for (UUID uuid : snitch.getGroup().getAllMembers()) {
-			Player player = Bukkit.getPlayer(uuid);
-			if (player == null) {
-				continue;
-			}
 			JASettingsManager settings = JukeAlert.getInstance().getSettingsManager();
 			if (settings.doesIgnoreAllAlerts(uuid)) {
 				continue;
@@ -50,18 +43,16 @@ public class BroadcastEntryAppender extends ConfigurableSnitchAppender<LimitedAc
 				continue;
 			}
 			if (snitch.hasPermission(uuid, JukeAlert.getInstance().getPermissionHandler().getSnitchAlerts())) {
-				TextComponent comp = log.getChatRepresentation(player.getLocation(), true);
-
-				if (settings.shouldShowDirections(uuid)) {
-					comp.addExtra(String.format("  %s", JAUtility.genDirections(snitch, player)));
-				}
+				TextComponent comp = log.getChatRepresentation(snitch.getLocation(), true);
 				if (settings.monocolorAlerts(uuid)) {
 					String raw = comp.toPlainText();
 					raw = ChatColor.stripColor(raw);
-					player.sendMessage(ChatColor.AQUA + raw);
+					ArtemisPlugin.getInstance().getRabbitHandler().sendMessage(new RabbitSendPlayerTextComponent(
+							NameAPI.CONSOLE_UUID, uuid, new TextComponent(ChatColor.AQUA + raw)));
 				}
 				else {
-					player.spigot().sendMessage(comp);
+					ArtemisPlugin.getInstance().getRabbitHandler().sendMessage(new RabbitSendPlayerTextComponent(
+							NameAPI.CONSOLE_UUID, uuid, new TextComponent(comp)));
 				}
 			}
 		}

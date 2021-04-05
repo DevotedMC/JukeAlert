@@ -1,8 +1,11 @@
 package com.untamedears.jukealert.commands;
 
+import com.untamedears.jukealert.model.Snitch;
+import com.untamedears.jukealert.model.appender.SnitchLogAppender;
+import com.untamedears.jukealert.util.JAUtility;
+import com.untamedears.jukealert.util.JukeAlertPermissionHandler;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

@@ -1,16 +1,13 @@
 package com.untamedears.jukealert.model.actions.impl;
 
-import java.util.UUID;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-
 import com.github.maxopoly.artemis.NameAPI;
 import com.untamedears.jukealert.model.Snitch;
 import com.untamedears.jukealert.model.actions.abstr.LoggablePlayerVictimAction;
-
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import java.util.UUID;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 import vg.civcraft.mc.civmodcore.inventorygui.DecorationStack;
 import vg.civcraft.mc.civmodcore.inventorygui.IClickable;
 
@@ -33,7 +30,7 @@ public class KillPlayerAction extends LoggablePlayerVictimAction {
 	@Override
 	public IClickable getGUIRepresentation() {
 		ItemStack is = new ItemStack(Material.DIAMOND_SWORD);
-		ItemAPI.addGlow(is);
+		ItemUtils.addGlow(is);
 		super.enrichGUIItem(is);
 		return new DecorationStack(is);
 	}
